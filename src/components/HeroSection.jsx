@@ -3,7 +3,7 @@ function HeroSection() {
     <section className='hero'>
       <div>
         <img
-          class='hero-banner'
+          className='hero-banner'
           src='https://i.postimg.cc/pXHbTWPP/banner1.avif'
           alt='Sale'
         />

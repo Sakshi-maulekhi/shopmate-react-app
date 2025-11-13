@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 function Header({ cartCount, cart, products, searchText, setSearchText, onSearchResultClick, onRemoveFromCart }) {
   const [btnValue, setBtnValue] = useState('Login');
-  const [btnValue2, setBtnValue2] = useState('2nd Button');
   const [showCart, setShowCart] = useState(false);
 
   function handleButtonClick() {
@@ -13,9 +12,6 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
   
   console.log('Hello, I am inside Header component');
 
-  useEffect(() => {
-    console.log('Hello, I am inside useEffect()');
-  }, [btnValue, btnValue2]);
 
   useEffect(() => {
     console.log('Hello, I am inside useEffect() with dependency');
@@ -107,7 +103,7 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
         </button>
         <button 
           className='cart-btn' 
-          style={{ position: 'relative', marginLeft: '16px', background: 'transparent', border: '1px solid pink',border:'none',borderRadius:'15px', cursor: 'pointer', padding: '2px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{ position: 'relative', marginLeft: '16px', background: 'transparent', border: '1px solid pink',borderRadius:'15px', cursor: 'pointer', padding: '2px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
           onClick={() => setShowCart(!showCart)}
         >
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWcUpKJi6hD6A9UKoxMKJfNuDPx5Iv5yi-ug&s" alt="Cart" style={{width:'35px',height:'35px',borderRadius:'50%',verticalAlign:'middle',background:'#fff',padding:'2px',objectFit:'cover'}} />

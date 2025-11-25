@@ -223,13 +223,14 @@ header {
   gap: 6px;                   
   transition: background 0.3s ease, transform 0.2s ease;
   white-space: nowrap;
+  min-height: 36px; /* keep button height stable */
 }
 
 .add-to-cart-btn img {
-  width: 16px;
-  height: 16px;
-  display: block;   
-  margin-top:8px;         
+  width: 18px;
+  height: 18px;
+  display: block;
+  margin: 0; /* remove top margin that caused the button to grow vertically */
 }
 
 .add-to-cart-btn:hover {

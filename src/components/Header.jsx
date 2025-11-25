@@ -1,13 +1,13 @@
 
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
+import Toast from './Toast';
 
-function Header({ cartCount, cart, products, searchText, setSearchText, onSearchResultClick, onRemoveFromCart }) {
-  const [btnValue, setBtnValue] = useState('Login');
+function Header({ cartCount, cart, products, searchText, setSearchText, onSearchResultClick, onRemoveFromCart, onShowToast }) {
   const [showCart, setShowCart] = useState(false);
-
-  function handleButtonClick() {
-    btnValue === 'Login' ? setBtnValue('Logout') : setBtnValue('Login');
-  }
+  const { user, logout } = useAuth();
+    const [toastMsg, setToastMsg] = useState(null);
 
   
   console.log('Hello, I am inside Header component');
@@ -62,6 +62,7 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
           }}
           style={{ padding: '10px', fontSize: '16px', marginRight: '10px', borderRadius: '10px', border: '1px solid #ddd', outline: 'none' }}
         />
+
         {searchText && (
           <div className='search-results-window' style={{
             position: 'absolute',
@@ -86,7 +87,10 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
                 {products.filter(p => p.name.toLowerCase().includes(searchText.toLowerCase())).map(product => (
                   <li key={product.id}
                       style={{display:'flex',alignItems:'center',marginBottom:'10px',borderBottom:'1px solid #eee',paddingBottom:'8px',cursor:'pointer'}}
-                      onClick={() => onSearchResultClick(product.id)}
+                      onClick={() => {
+                        onSearchResultClick(product.id);
+                        setSearchText('');
+                      }}
                   >
                     <img src={product.image} alt={product.name} style={{width:'40px',height:'40px',borderRadius:'8px',marginRight:'10px',objectFit:'cover'}} />
                     <div>
@@ -98,9 +102,33 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
             )}
           </div>
         )}
-        <button onClick={handleButtonClick} className='login-btn'>
-          {btnValue}
-        </button>
+
+        {!user ? (
+          <Link to="/login">
+            <button className='login-btn'>
+              Login
+            </button>
+          </Link>
+        ) : (
+          <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+            {user && user.email && (
+              <div style={{fontSize:'0.9rem',color:'white'}}>{user.email}</div>
+            )}
+            <button onClick={async () => {
+              try {
+                await logout();
+                  setToastMsg('Logged out successfully');
+              } catch (err) {
+                console.error('Logout error', err);
+                onShowToast && onShowToast('Logout failed');
+                              setToastMsg('Logout failed');
+              }
+            }} className='login-btn'>
+              Logout
+            </button>
+          </div>
+        )}
+
         <button 
           className='cart-btn' 
           style={{ position: 'relative', marginLeft: '16px', background: 'transparent', border: '1px solid pink',borderRadius:'15px', cursor: 'pointer', padding: '2px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
@@ -121,6 +149,7 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
             }}>{cartCount}</span>
           )}
         </button>
+
         {showCart && (
           <div className="cart-modal" style={{
             position: 'absolute',
@@ -155,6 +184,24 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
             <button onClick={() => setShowCart(false)} style={{marginTop:'10px',background:'#f31295ff',color:'#fff',border:'none',borderRadius:'6px',padding:'6px 16px',cursor:'pointer'}}>Close</button>
           </div>
         )}
+
+        {toastMsg && (
+          <Toast
+            message={toastMsg}
+            onClose={() => setToastMsg(null)}
+            style={{
+              position: 'absolute',
+              top: '64px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              right: 'auto',
+              background: '#222',
+              color: '#fff',
+              zIndex: 1500,
+            }}
+          />
+        )}
+
       </div>
     </header>
   );

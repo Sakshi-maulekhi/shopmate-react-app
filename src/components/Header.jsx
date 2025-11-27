@@ -99,7 +99,7 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
                   >
                     <img src={product.image} alt={product.name} style={{width:'40px',height:'40px',borderRadius:'8px',marginRight:'10px',objectFit:'cover'}} />
                     <div>
-                      <span style={{fontWeight:'bold'}}>{product.name}</span>
+                      <span style={{fontWeight:'normal'}}>{product.name}</span>
                     </div>
                   </li>
                 ))}

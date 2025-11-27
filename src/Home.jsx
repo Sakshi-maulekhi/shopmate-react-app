@@ -1,4 +1,4 @@
-import HeroSection from './components/HeroSection';
+import HeroSlider  from './components/HeroSlider';
 import ListProductsCategory from './components/ListProductsCategory';
 import ProductList from './components/ProductList';
 import { useOutletContext } from 'react-router-dom';
@@ -9,7 +9,7 @@ const Home = () => {
 
   return (
     <>
-      <HeroSection />
+      <HeroSlider  />
       <ListProductsCategory />
 
       {/* 🔥 Disable product detail links ONLY on Home products */}

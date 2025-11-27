@@ -1,11 +1,14 @@
-import HeroSection from './HeroSection';
+import { useOutletContext } from "react-router-dom";
+import WomenProductsGrid from "./women/WomenProductsGrid";
 
-const WomenCategory = () => {
+const WomenPage = () => {
+  const { onAddToCart } = useOutletContext();
+
   return (
-    <div>
-      
-    </div>
+    <>
+      <WomenProductsGrid onAddToCart={onAddToCart} />
+    </>
   );
 };
 
-export default WomenCategory;
+export default WomenPage;

@@ -3,11 +3,16 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import Toast from './Toast';
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 function Header({ cartCount, cart, products, searchText, setSearchText, onSearchResultClick, onRemoveFromCart, onShowToast }) {
   const [showCart, setShowCart] = useState(false);
   const { user, logout } = useAuth();
     const [toastMsg, setToastMsg] = useState(null);
+    const navigate = useNavigate();
 
   
   console.log('Hello, I am inside Header component');
@@ -19,7 +24,7 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
 
   return (
     <header>
-      <div className='logo'>E-commerce App</div>
+      <div className='logo'>Shopmate</div>
 
       <div>
         <nav>
@@ -34,13 +39,13 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
               <a href='/women'>Women</a>
             </li>
             <li className='menu-item'>
-              <a href='/kids'>Kids</a>
+              <a href='/Electronics'>Electronics</a>
             </li>
             <li className='menu-item'>
               <a href='/accessories'>Accessories</a>
             </li>
             <li className='menu-item'>
-              <a href='/sale'>Sale</a>
+              <Link to='/contact'>Contact</Link>
             </li>
           </ul>
         </nav>
@@ -104,35 +109,53 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
         )}
 
         {!user ? (
-          <Link to="/login">
+          <Link to="/login" state={{ resetForm: true }}>
+
             <button className='login-btn'>
               Login
             </button>
           </Link>
         ) : (
-          <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
-            {user && user.email && (
-              <div style={{fontSize:'0.9rem',color:'white'}}>{user.email}</div>
-            )}
-            <button onClick={async () => {
-              try {
-                await logout();
-                  setToastMsg('Logged out successfully');
-              } catch (err) {
-                console.error('Logout error', err);
-                onShowToast && onShowToast('Logout failed');
-                              setToastMsg('Logout failed');
-              }
-            }} className='login-btn'>
-              Logout
-            </button>
-          </div>
+          <div style={{display:"flex", flexDirection:"column", alignItems:"center", gap:"4px"}}>
+  {user && user.email && (
+    <span style={{fontSize:'0.9rem',color:'white', maxWidth:"120px", textAlign:"center", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>
+      {user.email}
+    </span>
+  )}
+
+  <button
+    onClick={async () => {
+      try {
+        await logout();
+        setToastMsg('Logged out successfully!!');
+        document.body.classList.remove("no-scroll");
+      } catch (err) {
+        setToastMsg('Logout failed');
+      }
+    }}
+    className='login-btn'
+  >
+    Logout
+  </button>
+</div>
+
         )}
 
         <button 
           className='cart-btn' 
           style={{ position: 'relative', marginLeft: '16px', background: 'transparent', border: '1px solid pink',borderRadius:'15px', cursor: 'pointer', padding: '2px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
-          onClick={() => setShowCart(!showCart)}
+          onClick={() => {
+  setShowCart(prev => {
+    const newState = !prev;
+    if (newState) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+    return newState;
+  });
+}}
+
         >
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWcUpKJi6hD6A9UKoxMKJfNuDPx5Iv5yi-ug&s" alt="Cart" style={{width:'35px',height:'35px',borderRadius:'50%',verticalAlign:'middle',background:'#fff',padding:'2px',objectFit:'cover'}} />
           {cartCount > 0 && (
@@ -170,18 +193,83 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
             ) : (
               <ul style={{listStyle:'none',padding:0}}>
                 {cart.map(item => (
-                  <li key={item.id} style={{marginBottom:'12px',borderBottom:'1px solid #eee',paddingBottom:'8px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                    <div>
-                      <span style={{fontWeight:'bold'}}>{item.name}</span> <br/>
-                      <span>Qty: {item.quantity}</span> <br/>
-                      <span>Price: ₹{item.price/100}</span>
-                    </div>
-                    <button onClick={() => onRemoveFromCart(item.id)} style={{marginLeft:'10px',background:'#ee3098ff',color:'#fff',border:'none',borderRadius:'6px',padding:'4px 10px',cursor:'pointer'}}>Remove</button>
-                  </li>
-                ))}
+  <li 
+    key={item.id} 
+    style={{
+      marginBottom: '12px',
+      borderBottom: '1px solid #eee',
+      paddingBottom: '8px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    }}
+  >
+    <div>
+      <span style={{ fontWeight: 'bold' }}>{item.name}</span> <br />
+      <span>Qty: {item.quantity}</span> <br />
+      <span>Price: ₹{item.price / 100}</span>
+    </div>
+
+    <div style={{ display: 'flex', gap: '6px', marginLeft: '10px' }}>
+      
+      {/* BUY BUTTON */}
+      <button
+        onClick={() => {
+          navigate('/place-order', { state: { item } });
+          setShowCart(false);
+        }}
+        style={{
+          background: '#5661f8ff',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          padding: '4px 10px',
+          cursor: 'pointer',
+          fontSize: '0.85rem'
+        }}
+      >
+        Buy
+      </button>
+
+      {/* REMOVE BUTTON */}
+      <button
+        onClick={() => onRemoveFromCart(item.id)}
+        style={{
+          background: '#ee3098ff',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          padding: '4px 10px',
+          cursor: 'pointer',
+          fontSize: '0.85rem'
+        }}
+      >
+        Remove
+      </button>
+    </div>
+  </li>
+))}
+
               </ul>
             )}
-            <button onClick={() => setShowCart(false)} style={{marginTop:'10px',background:'#f31295ff',color:'#fff',border:'none',borderRadius:'6px',padding:'6px 16px',cursor:'pointer'}}>Close</button>
+            <button
+  onClick={() => {
+    setShowCart(false);
+    document.body.classList.remove("no-scroll");
+  }}
+  style={{
+    marginTop:'10px',
+    background:'#f31295ff',
+    color:'#fff',
+    border:'none',
+    borderRadius:'6px',
+    padding:'6px 16px',
+    cursor:'pointer'
+  }}
+>
+  Close
+</button>
+
           </div>
         )}
 

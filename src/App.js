@@ -19,9 +19,21 @@ function App() {
 
   const cartKeyFor = (u) => (u && u.uid ? `cart:${u.uid}` : guestKey);
 
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem(cartKeyFor(user)); // remove from correct storage key
+  };
   useEffect(() => {
-    setProducts(productsData);
-  }, []);
+  const formatted = productsData.map(p => ({
+    ...p,
+    name: p.name ?? p.title ?? "Unknown Product",
+    rating: typeof p.rating === "object" ? p.rating?.rate : p.rating ?? 0,
+    price: (p.price ?? 0) * 100
+  }));
+
+  setProducts(formatted);
+}, []);
+
 
   useEffect(() => {
     const key = cartKeyFor(user);
@@ -55,6 +67,8 @@ function App() {
             return [];
           }
         })();
+        
+
 
         try {
           const preMerge = [...(localCart || []), ...(guestCart || [])];
@@ -121,37 +135,41 @@ function App() {
 
   return (
     <>
-      <Header
-        cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
-        cart={cart}
-        setCart={setCart}
-        products={products}
-        searchText={searchText}
-        setSearchText={setSearchText}
-        onSearchResultClick={id => {
-          const el = document.getElementById(`product-${id}`);
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-          setSearchText('');
-        }}
-        onRemoveFromCart={id => {
-          setCart(prevCart => {
-            return prevCart
-              .map(item =>
-                item.id === id
-                  ? { ...item, quantity: item.quantity - 1 }
-                  : item
-              )
-              .filter(item => item.quantity > 0);
-          });
-        }}
-      />
+      {/* Hide header on login and signup pages */}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && (
+        <Header
+          cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
+          cart={cart}
+          setCart={setCart}
+          products={products}
+          searchText={searchText}
+          setSearchText={setSearchText}
+          onSearchResultClick={id => {
+            const el = document.getElementById(`product-${id}`);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            setSearchText('');
+          }}
+          onRemoveFromCart={id => {
+            setCart(prevCart => {
+              return prevCart
+                .map(item =>
+                  item.id === id
+                    ? { ...item, quantity: item.quantity - 1 }
+                    : item
+                )
+                .filter(item => item.quantity > 0);
+            });
+          }}
+        />
+      )}
 
       {/* Outlet provides page content; pass shared handlers via context */}
-      <Outlet context={{ onAddToCart: handleAddToCart, products, searchText, setSearchText, cart, setCart }} />
+      <Outlet context={{ onAddToCart: handleAddToCart,clearCart, products, searchText, setSearchText, cart, setCart }} />
 
-      {(location.pathname === '/' || location.pathname === '/login') && <Footer />}
+      {/* Show ContactUs + Footer only on the home page */}
+      {location.pathname === '/' && <Footer />}
     </>
   );
 }

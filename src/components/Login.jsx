@@ -12,63 +12,171 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
     try {
       await login(email, password);
+
+      // ✅ Clear fields after successful login
+      setEmail('');
+      setPassword('');
+
       navigate('/');
     } catch (err) {
-      console.error('Login failed', err);
-      setError(err.message || 'Login failed');
+      console.log(err);
+      setError('⚠ Invalid login details');
     }
   };
+
   const handleGoogle = async () => {
     setError(null);
     try {
       await signInWithGoogle();
+
+      // ✅ Clear fields after Google login too
+      setEmail('');
+      setPassword('');
+
       navigate('/');
     } catch (err) {
-      console.error('Google sign-in failed', err);
-      setError(err.message || 'Google sign-in failed');
+      console.log(err);
+      setError('⚠ Google Sign-in failed');
     }
   };
 
   return (
-    <div style={{display:'flex',justifyContent:'center',alignItems:'center',minHeight:'70vh'}}>
-      <form onSubmit={handleSubmit} style={{width:'320px',padding:'24px',border:'1px solid #eee',borderRadius:'8px',boxShadow:'0 2px 8px rgba(0,0,0,0.08)'}}>
-        <h2 style={{textAlign:'center',marginBottom:'16px'}}>Login</h2>
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Welcome Back 👋</h2>
+        <p style={styles.subtext}>Login to continue shopping</p>
 
-        <label style={{display:'block',marginBottom:'8px'}}>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          required
-          style={{width:'100%',padding:'10px',marginBottom:'12px',borderRadius:'6px',border:'1px solid #ddd'}}
-        />
+        {error && <p style={styles.error}>{error}</p>}
 
-        <label style={{display:'block',marginBottom:'8px'}}>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
-          required
-          style={{width:'100%',padding:'10px',marginBottom:'16px',borderRadius:'6px',border:'1px solid #ddd'}}
-        />
+        <form onSubmit={handleSubmit} style={styles.form} autoComplete="off">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+            style={styles.input}
+            autoComplete="off"       // 🔴 stops browser autofill
+          />
 
-        <button type="submit" style={{width:'100%',padding:'10px',background:'#f31295ff',color:'#fff',border:'none',borderRadius:'6px',cursor:'pointer'}}>Login</button>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+            style={styles.input}
+            autoComplete="new-password"  // 🔴 helps prevent saved password fill
+          />
 
-        <button type="button" onClick={handleGoogle} style={{width:'100%',padding:'10px',background:'#4285F4',color:'#fff',border:'none',borderRadius:'6px',cursor:'pointer',marginTop:'10px'}}>Continue with Google</button>
+          <button type="submit" style={styles.loginBtn}>
+            Login
+          </button>
+        </form>
 
-        {error && <div style={{color:'red',marginTop:'8px'}}>{error}</div>}
+        <button onClick={handleGoogle} style={styles.googleBtn}>
+          <img
+            src="https://neilpatel.com/wp-content/uploads/2019/08/google.jpg"
+            alt="Google"
+            style={{ width: '40px', marginRight: '8px' }}
+          />
+          Continue with Google
+        </button>
 
-        <div style={{textAlign:'center',marginTop:'12px'}}>
-          <span>Don't have an account? </span>
-          <Link to="/signup">Sign up</Link>
-        </div>
-      </form>
+        <p style={styles.bottomText}>
+          Don't have an account?{' '}
+          <Link to="/signup" style={styles.link}>
+            Sign up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: 'linear-gradient(120deg,#fde2e4,#fad2e1)',
+  },
+  card: {
+    width: '350px',
+    background: '#fff',
+    padding: '32px',
+    borderRadius: '18px',
+    boxShadow: '0px 8px 25px rgba(0,0,0,0.1)',
+    textAlign: 'center',
+  },
+  title: {
+    fontSize: '1.9rem',
+    marginBottom: '6px',
+    fontWeight: '700',
+    color: '#e81f91',
+  },
+  subtext: {
+    marginBottom: '18px',
+    color: '#666',
+    fontSize: '0.95rem',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+  },
+  input: {
+    padding: '12px',
+    fontSize: '1rem',
+    borderRadius: '10px',
+    border: '1px solid #ddd',
+    outline: 'none',
+    transition: '0.2s',
+  },
+  loginBtn: {
+    marginTop: '10px',
+    padding: '12px',
+    borderRadius: '10px',
+    background: 'linear-gradient(45deg,#e81f91,#ff6b9f)',
+    border: 'none',
+    color: '#fff',
+    fontSize: '1.1rem',
+    cursor: 'pointer',
+  },
+  googleBtn: {
+    marginTop: '14px',
+    padding: '12px',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: '#fff',
+    border: '1px solid #ddd',
+    cursor: 'pointer',
+    borderRadius: '10px',
+  },
+  bottomText: {
+    marginTop: '18px',
+    fontSize: '0.9rem',
+    color: '#444',
+  },
+  link: {
+    color: '#e81f91',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+  },
+  error: {
+    background: '#ffe5e5',
+    color: 'red',
+    padding: '8px',
+    fontSize: '0.85rem',
+    borderRadius: '6px',
+    marginBottom: '12px',
+  },
+};
 
 export default Login;

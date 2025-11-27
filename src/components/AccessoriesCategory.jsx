@@ -1,11 +1,10 @@
-import HeroSection from './HeroSection';
+import { useOutletContext } from "react-router-dom";
+import JewelleryProductsGrid from "./accessories/JewelleryProductsGrid";
 
-const AccessoriesCategory = () => {
-  return (
-    <div>
-      
-    </div>
-  );
+const JewelleryPage = () => {
+  const { onAddToCart } = useOutletContext();
+
+  return <JewelleryProductsGrid onAddToCart={onAddToCart} />;
 };
 
-export default AccessoriesCategory;
+export default JewelleryPage;

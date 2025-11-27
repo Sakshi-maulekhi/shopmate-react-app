@@ -1,11 +1,14 @@
-import MenHeroSection from './men/MenHeroSection';
+import { useOutletContext } from "react-router-dom";
+import MenProductsGrid from "./men/MenProductsGrid";
 
-const MenCategory = () => {
+const MenPage = () => {
+  const { onAddToCart } = useOutletContext();
+
   return (
-    <div>
-      <MenHeroSection />
-    </div>
+    <>
+      <MenProductsGrid onAddToCart={onAddToCart} />
+    </>
   );
 };
 
-export default MenCategory;
+export default MenPage;

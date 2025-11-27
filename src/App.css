@@ -1,6 +1,6 @@
 
 .product-card {
-  width: 240px;
+  width: 140px;
   height: 340px;
   box-sizing: border-box;
   background: #fff;
@@ -87,28 +87,23 @@
 
 /* Footer styles */
 .footer {
-  background: #222;
-  color: #fff;
-  padding: 30px 0 10px 0;
-  text-align: center;
- 
+  background: #111;
+  color: #eee;
+  padding: 50px 20px 20px;
+  margin-top: 0;
 }
 
 .footer-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 40px;
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 1100px;
+  margin: auto;
 }
 
-.footer-section {
-  min-width: 180px;
-}
-
-.footer-section h3, .footer-section h4 {
-  margin-bottom: 10px;
+.footer-section h4 {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
 }
 
 .footer-section ul {
@@ -120,21 +115,55 @@
   margin-bottom: 8px;
 }
 
-.footer-section a {
-  color: #fff;
+.footer-section ul li a {
+  color: #bbb;
   text-decoration: none;
-  transition: color 0.2s;
 }
 
-.footer-section a:hover {
-  color: #fa4cc0;
+.footer-section ul li a:hover {
+  color: #fff;
 }
 
-.social-links {
+/* Newsletter form */
+.newsletter-form {
   display: flex;
-  gap: 12px;
-  justify-content: center;
+  margin-top: 10px;
 }
+
+.newsletter-form input {
+  padding: 10px;
+  border-radius: 4px 0 0 4px;
+  border: none;
+  width: 70%;
+}
+
+.newsletter-form button {
+  padding: 10px 18px;
+  background: #ff4da6;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Social links */
+.social-links li {
+  margin-bottom: 6px;
+}
+
+/* Bottom bar */
+.footer-bottom {
+  text-align: center;
+  margin-top: 35px;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+}
+
+.payment-icons span {
+  margin: 0 8px;
+  color: #aaa;
+}
+
 .header-right input{
   outline: none;
 }

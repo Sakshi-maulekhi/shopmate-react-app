@@ -11,7 +11,9 @@ const Home = () => {
     <>
       <HeroSection />
       <ListProductsCategory />
-      <ProductList onAddToCart={onAddToCart} />
+
+      {/* 🔥 Disable product detail links ONLY on Home products */}
+      <ProductList onAddToCart={onAddToCart}  />
     </>
   );
 };

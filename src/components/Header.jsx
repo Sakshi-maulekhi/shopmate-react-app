@@ -214,22 +214,36 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
       
       {/* BUY BUTTON */}
       <button
-        onClick={() => {
-          navigate('/place-order', { state: { item } });
-          setShowCart(false);
-        }}
-        style={{
-          background: '#5661f8ff',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '6px',
-          padding: '4px 10px',
-          cursor: 'pointer',
-          fontSize: '0.85rem'
-        }}
-      >
-        Buy
-      </button>
+  onClick={() => {
+    if (!user) {
+      setToastMsg("⚠️ Please login first to continue.");
+      setShowCart(false);
+
+      // Redirect after 1.5 seconds (optional)
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+
+      return;
+    }
+
+    // If logged in, go to order page
+    navigate('/place-order', { state: { item } });
+    setShowCart(false);
+  }}
+  style={{
+    background: '#5661f8ff',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    padding: '4px 10px',
+    cursor: 'pointer',
+    fontSize: '0.85rem'
+  }}
+>
+  Buy
+</button>
+
 
       {/* REMOVE BUTTON */}
       <button

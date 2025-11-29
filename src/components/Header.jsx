@@ -205,7 +205,7 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
     }}
   >
     <div>
-      <span style={{ fontWeight: 'bold' }}>{item.name}</span> <br />
+      <span style={{ fontWeight: 'normal' }}>{item.name}</span> <br />
       <span>Qty: {item.quantity}</span> <br />
       <span>Price: ₹{item.price / 100}</span>
     </div>
@@ -213,13 +213,14 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
     <div style={{ display: 'flex', gap: '6px', marginLeft: '10px' }}>
       
       {/* BUY BUTTON */}
+      
       <button
   onClick={() => {
     if (!user) {
       setToastMsg("⚠️ Please login first to continue.");
       setShowCart(false);
+      document.body.classList.remove("no-scroll");
 
-      // Redirect after 1.5 seconds (optional)
       setTimeout(() => {
         navigate("/login");
       }, 1500);
@@ -227,9 +228,10 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
       return;
     }
 
-    // If logged in, go to order page
     navigate('/place-order', { state: { item } });
+
     setShowCart(false);
+    document.body.classList.remove("no-scroll");
   }}
   style={{
     background: '#5661f8ff',
@@ -243,6 +245,7 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
 >
   Buy
 </button>
+
 
 
       {/* REMOVE BUTTON */}

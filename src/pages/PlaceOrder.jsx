@@ -87,7 +87,7 @@ const styles = {
     padding: "20px",
     border: "1px solid #ddd",
     borderRadius: "12px",
-    background: "#f7dedeff",
+    background: "#f7e4e4ff",
   },
   image: {
     width: "180px",

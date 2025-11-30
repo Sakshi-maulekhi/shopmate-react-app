@@ -24,7 +24,7 @@ function Header({ cartCount, cart, products, searchText, setSearchText, onSearch
 
   return (
     <header>
-      <div className='logo'>Shopmate</div>
+      <div className='logo'>ShopMate</div>
 
       <div>
         <nav>

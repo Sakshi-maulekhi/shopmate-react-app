@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   height: 78vh;
+  
   overflow: hidden;
 }
 
@@ -17,9 +18,13 @@
 .slide-img {
   width: 100%;
   height: 100%;
-  object-fit: fill;
-  flex-shrink: 0;   /* prevents squishing */
+  object-fit: contain;
+  object-position: center;
+  background: #644d4d; /* optional background fill */
+  flex-shrink: 0;
 }
+
+
 
 /* Arrows */
 .arrow {
@@ -29,7 +34,7 @@
   background: rgba(255, 255, 255, 0.7);
   border: none;
   font-size: 24px;
-  padding: 8px 12px;
+  padding: 6px 15px;
   cursor: pointer;
   border-radius: 50%;
   transition: 0.3s;

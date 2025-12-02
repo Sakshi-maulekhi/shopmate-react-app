@@ -2,13 +2,14 @@
 import { useState, useEffect } from "react";
 import "../HeroSlider.css";
 import men2 from "../assets/men2.jpg";
+
 import laptop from "../assets/laptop.jpg";
 
 const images = [
   "https://i.postimg.cc/pXHbTWPP/banner1.avif",
-  men2,
+  laptop,
   
-  laptop
+  men2
 ];
 
 export default function HeroSlider() {
